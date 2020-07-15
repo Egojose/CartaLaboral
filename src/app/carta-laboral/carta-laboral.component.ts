@@ -105,7 +105,7 @@ export class CartaLaboralComponent implements OnInit {
         this.cedula = respuesta[0].NumeroDocumento;
         this.terminoContrato = respuesta[0].TerminoContrato;
         this.salario = respuesta[0].Salario;
-        this.salarioTexto = respuesta[0].salarioTexto;
+        this.salarioTexto = respuesta[0].SalarioTexto;
         this.fechaIngreso = respuesta[0].FechaIngreso;
         respuesta[0].Sede === null || respuesta[0].Sede === undefined ? this.sede = '' : this.sede = respuesta[0].Sede;
       }

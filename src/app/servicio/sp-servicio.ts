@@ -58,12 +58,12 @@ export class SPServicio {
     }
 
     obtenerUsuario(UsuarioActualId) {
-        let respuesta = this.ObtenerConfiguracionGH().web.lists.getByTitle(environment.ListaEmpleados).items.filter("usuario eq "+UsuarioActualId).select("*","Jefe/Title","Jefe/EMail").expand("Jefe").getAll();
+        let respuesta = this.ObtenerConfiguracion().web.lists.getByTitle(environment.ListaEmpleados).items.filter("usuario eq "+UsuarioActualId).select("*").getAll();
         return respuesta;
     }
 
     public consultarConfiguracionCL(){
-        let respuesta = this.ObtenerConfiguracionGH().web.lists.getByTitle("ConfiguracionCartaLaboral").items.get();
+        let respuesta = this.ObtenerConfiguracion().web.lists.getByTitle("ConfiguracionCartaLaboral").items.get();
         return respuesta;
     }
 }

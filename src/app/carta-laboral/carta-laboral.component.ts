@@ -15,7 +15,7 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 })
 export class CartaLaboralComponent implements OnInit {
   form: FormGroup;
-  dirigido = 'quien pueda interesar';
+  dirigido: string;
   primerNombre: string;
   segundoNombre: string;
   primerApellido: string;
@@ -113,15 +113,16 @@ export class CartaLaboralComponent implements OnInit {
   }
 
  async generarCertificado() {
+   (this.dirigido === '' || this.dirigido === undefined || this.dirigido === null) ? this.dirigido = 'quien pueda interesar' : this.dirigido;
     let nombre = `${this.primerNombre} ${this.segundoNombre} ${this.primerApellido} ${this.segundoApellido}`;
-    let SalarioDecript = CryptoJS.AES.decrypt(
-      this.salario.trim(),
-      "12ab".trim()
-    ).toString(CryptoJS.enc.Utf8);
-    let SalarioTextoDecript = CryptoJS.AES.decrypt(
-      this.salarioTexto.trim(),
-      "12ab".trim()
-    ).toString(CryptoJS.enc.Utf8);
+    // let SalarioDecript = CryptoJS.AES.decrypt(
+    //   this.salario.trim(),
+    //   "12ab".trim()
+    // ).toString(CryptoJS.enc.Utf8);
+    // let SalarioTextoDecript = CryptoJS.AES.decrypt(
+    //   this.salarioTexto.trim(),
+    //   "12ab".trim()
+    // ).toString(CryptoJS.enc.Utf8);
     let fecha = new Date();
     let dia = fecha.getDate();
     let mes = this.meses[fecha.getMonth()];
@@ -138,8 +139,8 @@ export class CartaLaboralComponent implements OnInit {
     this.cuerpo = this.cuerpo.replace("{dia}", diaInicio);
     this.cuerpo = this.cuerpo.replace("{mes}", mesInicio);
     this.cuerpo = this.cuerpo.replace("{ano}", anioInicio);
-    this.cuerpo = this.cuerpo.replace("{salario}", SalarioDecript);
-    this.cuerpo = this.cuerpo.replace("{salarioTexto}", SalarioTextoDecript);
+    this.cuerpo = this.cuerpo.replace("{salario}", this.salario);
+    this.cuerpo = this.cuerpo.replace("{salarioTexto}", this.salarioTexto);
 
     this.notaExpedicion = this.notaExpedicion.replace("{dirigidoA}", this.dirigido);
     this.notaExpedicion = this.notaExpedicion.replace("{dia}", dia.toString());
@@ -149,7 +150,7 @@ export class CartaLaboralComponent implements OnInit {
     const pdf = new PdfMakeWrapper();
 
     pdf.background(
-      await new Img("../assets/imagenes/formatoMundoMujer-1.jpg").width(630).build()
+      await new Img("assets/imagenes/formatoMundoMujer-1.jpg").width(630).build()
     );
     pdf.add(
       new Txt(this.sede + ", " + stringFecha).margin([50, 50, 0, 0]).end
@@ -165,7 +166,7 @@ export class CartaLaboralComponent implements OnInit {
     pdf.add(new Txt(this.notaExpedicion).margin([50, 80, 0, 0]).end);
     pdf.add(new Txt("Cordialmente,").margin([50, 30, 0, 0]).end);
     pdf.add(
-      await new Img('../../assets/imagenes/Firma.jpg')
+      await new Img('assets/imagenes/Firma.jpg')
         .margin([50, 0, 0, 0])
         .width(130)
         .build()

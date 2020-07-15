@@ -1,2 +1,31 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 offset-8 mt-5">
+            <h6 class="text-right">¡Hola! {{usuario.Title}}</h6>
+        </div>
+    </div>
+    <mat-card class="shipping-card">
+        <mat-card-header>
+            <mat-card-title>
+                Generar certificado laboral
+            </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <div class="row">
+                <div class="col">
+                    <mat-form-field class="full-width">
+                        <input matInput placeholder="¿A quién va dirigida?" [(ngModel)]="dirigido">
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4 offset-4">
+                    <button type="button" class="btn btn-default btn-block" (click)="generarCertificado()">Generar pdf</button>
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>
+
 <pdf-viewer [src]="pdfSrc" [render-text]="true" style="display: block;"></pdf-viewer>
 <ng4-loading-spinner>...Procesando</ng4-loading-spinner>

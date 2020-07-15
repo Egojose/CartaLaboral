@@ -53,7 +53,7 @@ export class SPServicio {
     } 
 
     ObtenerUsuarioActual() {
-        let respuesta = from(this.ObtenerConfiguracion().web.currentUser.select('*', 'Author/Department').expand('Author').get());
+        let respuesta = this.ObtenerConfiguracion().web.currentUser.select('*', 'Author/Department').expand('Author').get();
         return respuesta;
     }
 

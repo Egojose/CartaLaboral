@@ -11,14 +11,17 @@
             </mat-card-title>
         </mat-card-header>
         <mat-card-content>
-            <div class="row">
-                <div class="col">
-                    <mat-form-field class="full-width">
-                        <input matInput placeholder="¿A quién va dirigida?" [(ngModel)]="dirigido">
-                    </mat-form-field>
-                </div>
-            </div>
-            <div class="row">
+
+<div class="row">
+  <div class="col-sm-4">
+    <section class="example-section">
+      <mat-checkbox color="primary" [(ngModel)]="IncluirSalario" class="example-margin">Incluir Salario!</mat-checkbox>
+
+    </section>
+  </div>
+
+
+           
                 <div class="col-4 offset-4">
                     <button type="button" class="btn btn-default btn-block" (click)="generarCertificado()">Generar pdf</button>
                 </div>

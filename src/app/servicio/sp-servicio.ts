@@ -58,7 +58,7 @@ export class SPServicio {
     }
 
     obtenerUsuario(UsuarioActualId) {
-        let respuesta = this.ObtenerConfiguracionGH().web.lists.getByTitle(environment.ListaEmpleados).items.filter("usuario eq "+UsuarioActualId).select("*","Jefe/Title","Jefe/EMail").expand("Jefe").getAll();
+        let respuesta = this.ObtenerConfiguracionGH().web.lists.getByTitle(environment.ListaEmpleados).items.filter("usuario eq " + UsuarioActualId).select("*", "Empresa/Title", "Empresa/Nit", "Empresa/Director", "Empresa/Cargo", "Empresa/UrlFirma").expand("Empresa").getAll();
         return respuesta;
     }
 

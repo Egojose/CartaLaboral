@@ -11,6 +11,8 @@ input{
     background-color: #ced4da;
     padding: 25px 30px 30px 30px;
     border-radius: 3px;
+    overflow-y: auto;
+    height: 200px;
 }
 
 .no-margin{

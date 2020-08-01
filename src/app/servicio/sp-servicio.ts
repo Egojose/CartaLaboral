@@ -58,7 +58,7 @@ export class SPServicio {
     }
 
     obtenerUsuario(UsuarioActualId) {
-        let respuesta = this.ObtenerConfiguracionGH().web.lists.getByTitle(environment.ListaEmpleados).items.filter("usuario eq " + UsuarioActualId).select("*", "Empresa/Title", "Empresa/Nit", "Empresa/Director", "Empresa/Cargo", "Empresa/UrlFirma").expand("Empresa").getAll();
+        let respuesta = this.ObtenerConfiguracionGH().web.lists.getByTitle(environment.ListaEmpleados).items.filter("usuario eq " + UsuarioActualId).select("*", "Empresa/Title", "Empresa/Nit", "Empresa/Director", "Empresa/Cargo", "Empresa/UrlFirma", "Empresa/UrlFormato", "Empresa/UrlLogo").expand("Empresa").getAll();
         return respuesta;
     }
 
@@ -66,4 +66,11 @@ export class SPServicio {
         let respuesta = this.ObtenerConfiguracionGH().web.lists.getByTitle("ConfiguracionCartaLaboral").items.get();
         return respuesta;
     }
+    
+
+    public obtenerInformacionDetalleNomina(pcedula, pmes, pano) {
+        let respuesta = this.ObtenerConfiguracionGH().web.lists.getByTitle(environment.ListaDetalleNomina).items.filter("CEDULA eq '" + pcedula + "' and MES eq '" + pmes +"' and ANIO eq '" + pano + "'").select("*").getAll();
+        return respuesta;
+    }
+
 }

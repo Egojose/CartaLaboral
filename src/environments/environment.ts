@@ -5,6 +5,7 @@ export const environment = {
   urlWebGH: 'https://enovelsoluciones.sharepoint.com/sites/IntranetAraujo/gestion-humana', 
   urlReltativa: 'sites/Intranet/Servicios',
   ListaEmpleados: 'Empleados',
-  ListaConfiguracionCartaLaboral: 'ConfiguracionCartaLaboral'
+  ListaConfiguracionCartaLaboral: 'ConfiguracionCartaLaboral',
+  ListaDetalleNomina: 'DetalleNomina'
 };
 

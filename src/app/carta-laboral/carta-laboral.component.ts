@@ -19,6 +19,7 @@ export class CartaLaboralComponent implements OnInit {
   /*Info empleado*/
   empresaEmpleado = "";
   nitEmpresa = "";
+  formatoEmpresa = "";
 
   primerNombre = "";
   segundoNombre = "";
@@ -104,12 +105,13 @@ export class CartaLaboralComponent implements OnInit {
         console.log(respuesta);
         this.empresaEmpleado = respuesta[0].Empresa.Title;
         this.nitEmpresa = respuesta[0].Empresa.Nit;
+        this.formatoEmpresa = respuesta[0].Empresa.UrlFormato;
 
-        this.primerNombre = respuesta[0].PrimerNombre;
-        this.segundoNombre = respuesta[0].SegundoNombre;
-        this.primerApellido = respuesta[0].PrimerApellido;
-        this.segundoApellido = respuesta[0].SegundoApellido;
-
+        this.primerNombre = respuesta[0].PrimerNombre ? respuesta[0].PrimerNombre : "";
+        this.segundoNombre = respuesta[0].SegundoNombre ? respuesta[0].SegundoNombre : "";
+        this.primerApellido = respuesta[0].PrimerApellido ? respuesta[0].PrimerApellido : "";
+        this.segundoApellido = respuesta[0].SegundoApellido ? respuesta[0].SegundoApellido : "";
+        
         this.tipoDocumento = respuesta[0].TipoDocumento;
         this.cedula = respuesta[0].NumeroDocumento;
         this.lugarExpedicion = respuesta[0].lugarExpedicion;
@@ -165,16 +167,22 @@ export class CartaLaboralComponent implements OnInit {
     const pdf = new PdfMakeWrapper();
 
     pdf.background(
-      await new Img("../assets/imagenes/formatoMundoMujer-1.jpg").width(630).build()
+      await new Img(this.formatoEmpresa).width(630).build()
     );
     pdf.add(
       new Txt("Popayán, "+ stringFecha).margin([50, 50, 0, 0]).end
     );
     pdf.add(
-      new Txt("EL DIRECTOR EJECUTIVO").bold().margin([230, 40, 0, 0]).end
+      new Txt("EL DIRECTOR EJECUTIVO").bold().margin([190, 40, 0, 0]).end
     );
+    
+    // pdf.add(
+    //   new Txt("|").bold().margin([255, 0, 0, 0]).end
+    // );
+    let textoEmpresa = "DE " + this.empresaEmpleado;
+    let margenDerechaTextoEmpresa = (255 - ((textoEmpresa.length * 0.5))*7.0);
     pdf.add(
-      new Txt("DE " + this.empresaEmpleado).bold().margin([230, 0, 0, 0]).end
+      new Txt("DE " + this.empresaEmpleado).bold().margin([margenDerechaTextoEmpresa, 0, 0, 0]).end
     );
     pdf.add(new Txt("CERTIFICA").bold().margin([230, 50, 0, 0]).end);
     

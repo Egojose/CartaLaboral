@@ -9,7 +9,12 @@
 
     <div class="row justify-content-center top-section">
         <div class="col-10 col-sm-9 col-md-9 col-lg-9 mb-2">
-            <h6 class="welcome">¡Hola! {{usuario.Title}}</h6>
+            
+            <div *ngIf="usuario; then thenBlock else elseBlock"></div>
+            <ng-template #thenBlock>
+              <h6 class="welcome">¡Hola! {{usuario.Title}}</h6>
+            </ng-template>
+            <ng-template #elseBlock></ng-template>
         </div>
         <div class="col-10 col-sm-9 col-md-9 col-lg-9 card-while">
             <div class="row justify-content-center">

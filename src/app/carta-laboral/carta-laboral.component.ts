@@ -119,7 +119,7 @@ export class CartaLaboralComponent implements OnInit {
         this.fechaIngreso = respuesta[0].FechaIngreso;
         this.tipoContrato = respuesta[0].TipoContrato;
 
-        this.salario = respuesta[0].Salario;
+        this.salario = this.formatSueldo(respuesta[0].Salario, respuesta[0].NumeroDocumento, respuesta[0].Id);
         this.salarioTexto = respuesta[0].salarioTexto;
         this.cargo = respuesta[0].Cargo;
 
@@ -158,8 +158,8 @@ export class CartaLaboralComponent implements OnInit {
     this.cuerpo = this.cuerpo.replace("{fechaIngreso}", this.formatDate(new Date(this.fechaIngreso)) );
     this.cuerpo = this.cuerpo.replace("{tipoContrato}", this.tipoContrato);
     
-    this.cuerpoSalario = this.cuerpoSalario.replace("{salarioTexto}", this.salarioTexto);
-    this.cuerpoSalario = this.cuerpoSalario.replace("{salario}", this.salario);
+    this.cuerpoSalario = this.cuerpoSalario.replace("{salarioTexto}", this.formatLetrasSuelto(this.salarioTexto));
+    this.cuerpoSalario = this.cuerpoSalario.replace("{salario}", this.humanizeNumber(this.salario));
 
     this.cuerpoCargo = this.cuerpoCargo.replace("{cargo}", this.cargo);
     
@@ -234,5 +234,51 @@ export class CartaLaboralComponent implements OnInit {
     return [day, month, year].join(" ");
   }
 
+
+  formatSueldo(sueldo, cedula , id ) {
+    var sueldoNumero = sueldo;
+    
+    sueldoNumero = sueldoNumero.replace('SECRETO', '');
+    sueldoNumero = sueldoNumero.replace(/AXy/g, "0");
+    sueldoNumero = sueldoNumero / id;
+    sueldoNumero = sueldoNumero+(cedula*1)
+  
+    return sueldoNumero;
+  }
+
+  formatLetrasSuelto(sueldo) {
+    var sueldoLetras = sueldo;
+
+
+    sueldoLetras = sueldoLetras.replace('SECRETO', '');
+
+
+    sueldoLetras = sueldoLetras.replace(/807/g, "N");
+    sueldoLetras = sueldoLetras.replace(/804/g, "O");
+    sueldoLetras = sueldoLetras.replace(/809/g, "U");
+    sueldoLetras = sueldoLetras.replace(/810/g, "A");
+    sueldoLetras = sueldoLetras.replace(/825/g, "S");
+    sueldoLetras = sueldoLetras.replace(/836/g, "C");
+    sueldoLetras = sueldoLetras.replace(/881/g, "I");
+    sueldoLetras = sueldoLetras.replace(/821/g, "E");
+    sueldoLetras = sueldoLetras.replace(/899/g, "M");
+    sueldoLetras = sueldoLetras.replace(/877/g, "L");
+
+    //replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(toUpper(triggerBody()?['salarioTexto']),'N','807'),'O','804'),'U','809'),'A','810'),'S','825'),'C','836'),'I','881'),'E','821'),'M','899'),'L','877')
+
+
+    return sueldoLetras;
+  }
+
+  humanizeNumber(n) {
+    n = n.toString()
+    while (true) {
+      var n2 = n.replace(/(\d)(\d{3})($|,|\.)/g, '$1.$2$3')
+      n2 = n2
+      if (n == n2) break
+      n = n2
+    }
+    return n
+  }
 
 }

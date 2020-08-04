@@ -36,3 +36,265 @@
 /* ::ng-deep input.mat-input-element {
     color: #484a4c;
   } */
+
+.card-while{
+  background-color: #fefefe;
+  border-bottom: 10px solid yellow;
+}
+
+::ng-deep .mat-checkbox-layout .mat-checkbox-inner-container{
+  width: 25px;
+  height: 25px;
+}
+
+::ng-deep .mat-checkbox-label-before .mat-checkbox-inner-container {
+  margin-left: 20px;
+}
+
+/*
+  responsive view
+*/
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 320px) {
+  .content-background{
+    height: 100vh;
+    background-color: #D7D7D6;    
+    background-image: url('../../assets/imagenes/GEMM-certificado-2-movil.png');
+    margin: 0px;
+    width: 100%;
+    max-width: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    position: relative;
+  }
+
+  .border-title{
+    padding-top: 22px; 
+    background-color: #0f5990;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    border-bottom-left-radius: 45px;
+    border-bottom-right-radius: 45px;
+    color: #fefefe;
+    font-size: 30px;    
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
+  .top-section{
+    margin-top: 40px;
+  }
+
+  .seccion-check{
+    color: #0f5990;
+    font-size: 20px;
+  }
+
+  .content-check{
+    background-color: #d7d7d7;
+    margin: 20px;
+    padding: 50px;
+  }
+
+  .welcome{
+    color: #fefefe;
+    text-align: center;
+  }
+
+}
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {
+  .content-background{
+    height: 100vh;
+    background-color: #D7D7D6;    
+    background-image: url('../../assets/imagenes/GEMM-certificado-2-movil.png');
+    margin: 0px;
+    width: 100%;
+    max-width: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    position: relative;
+  }
+
+  .border-title{
+    padding-top: 22px; 
+    background-color:#0f5990;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    border-bottom-left-radius: 45px;
+    border-bottom-right-radius: 45px;
+    color: #fefefe;
+    font-size: 50px;    
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
+  .top-section{
+    margin-top: 60px;
+  }
+
+  .seccion-check{
+    color: #0f5990;
+    font-size: 30px;
+  }
+
+  .content-check{
+    background-color: #d7d7d7;
+    margin: 20px;
+    padding: 50px;
+  }
+
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+  .content-background{
+    height: 100vh;
+    background-color: #D7D7D6;    
+    background-image: url('../../assets/imagenes/GEMM-certificado-2.png');
+    margin: 0px;
+    width: 100%;
+    max-width: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    position: relative;
+  }
+
+  .border-title{
+    padding-top: 22px; 
+    background-color: #0f5990;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    border-bottom-left-radius: 45px;
+    border-bottom-right-radius: 45px;
+    color: #fefefe;
+    font-size: 50px;
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
+  .top-section{
+    margin-top: 60px;
+  }
+
+  .seccion-check{
+    color: #0f5990;
+    font-size: 30px;
+  }
+
+  .content-check{
+    background-color: #d7d7d7;
+    margin: 20px;
+    padding: 50px;
+  }
+
+  .welcome{
+    color: #fefefe;
+    text-align: center;
+  }
+
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+  .content-background{
+    height: 100vh;
+    background-color: #D7D7D6;    
+    background-image: url('../../assets/imagenes/GEMM-certificado-2.png');
+    margin: 0px;
+    width: 100%;
+    max-width: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    position: relative;
+  }
+
+  .border-title{
+    padding-top: 22px; 
+    background-color: #0f5990;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    border-bottom-left-radius: 45px;
+    border-bottom-right-radius: 45px;
+    color: #fefefe;
+    font-size: 50px;    
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
+  .top-section{
+    margin-top: 60px;
+  }
+
+  .seccion-check{
+    color: #0f5990;
+    font-size: 30px;
+  }
+
+  .content-check{
+    background-color: #d7d7d7;
+    margin: 20px;
+    padding: 50px;
+  }
+
+  .welcome{
+    color: #fefefe;
+    text-align: right;
+  }
+
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+  .content-background{
+    height: 100vh;
+    background-color: #D7D7D6;    
+    background-image: url('../../assets/imagenes/GEMM-certificado-2.png');
+    margin: 0px;
+    width: 100%;
+    max-width: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    position: relative;
+  }
+
+  .border-title{
+    background-color: #0f5990;
+    padding-top: 25px;
+    padding-bottom: 25px;
+    border-bottom-left-radius: 45px;
+    border-bottom-right-radius: 45px;
+    color: #fefefe;
+    font-size: 45px;
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
+  .top-section{
+    margin-top: 60px;
+  }
+
+  .seccion-check{
+    color: #0f5990;
+    font-size: 30px;
+  }
+
+  .content-check{
+    background-color: #d7d7d7;
+    margin: 20px;
+    padding: 35px;
+  }
+
+  .welcome{
+    color: #fefefe;
+    text-align: right;
+  }
+
+}

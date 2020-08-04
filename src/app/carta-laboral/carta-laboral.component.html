@@ -1,31 +1,42 @@
-<div class="container">
-    <div class="row">
-        <div class="col-md-4 offset-8 mt-5">
-            <h6 class="text-right">¡Hola! {{usuario.Title}}</h6>
+
+<div class="container content-background">
+    <div class="row justify-content-center">
+        <div class="col-10 text-center border-title">
+            certificado laboral
         </div>
     </div>
-    <mat-card class="shipping-card">
-        <mat-card-header>
-            <mat-card-title>
-                Generar certificado laboral
-            </mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-            <div class="row">
-                <div class="col">
-                    <mat-form-field class="full-width">
-                        <input matInput placeholder="¿A quién va dirigida?" [(ngModel)]="dirigido">
-                    </mat-form-field>
+
+
+    <div class="row justify-content-center top-section">
+        <div class="col-10 col-sm-9 col-md-9 col-lg-9 mb-2">
+            
+            <div *ngIf="usuario; then thenBlock else elseBlock"></div>
+            <ng-template #thenBlock>
+              <h6 class="welcome">¡Hola! {{usuario.Title}}</h6>
+            </ng-template>
+            <ng-template #elseBlock></ng-template>
+        </div>
+        <div class="col-10 col-sm-9 col-md-9 col-lg-9 card-while">
+            <div class="row justify-content-center">
+                <div class="col-10 col-sm-12 col-md-6 col-lg-6 text-center content-check">
+                    <section class="example-section seccion-check">
+                        <mat-checkbox color="primary" [(ngModel)]="IncluirSalario" class="example-margin" labelPosition="before">Incluir Salario </mat-checkbox>
+
+                    </section>
+
+                </div>
+                <div class="col-12 col-sm-10 col-md-5 col-lg-5 text-center align-self-center">
+                    <div class="row justify-content-center mb-2 mb-sm-0 mb-md-0 mb-lg-0">  
+                        <button type="button" class="btn btn-primary btn-block col-6 btn-lg" (click)="generarCertificado()">Descargar</button>
+                    </div>                 
                 </div>
             </div>
-            <div class="row">
-                <div class="col-4 offset-4">
-                    <button type="button" class="btn btn-default btn-block" (click)="generarCertificado()">Generar pdf</button>
-                </div>
-            </div>
-        </mat-card-content>
-    </mat-card>
+        </div>
+    </div>
+
 </div>
+<app-footer></app-footer>
+
 
 <pdf-viewer [src]="pdfSrc" [render-text]="true" style="display: block;"></pdf-viewer>
 <ng4-loading-spinner>...Procesando</ng4-loading-spinner>

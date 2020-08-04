@@ -1,0 +1,54 @@
+<div class="container content-background">
+  <div class="row justify-content-center">
+    <div class="col-10 text-center border-title">
+      Desprendibles de nomina
+    </div>
+  </div>
+
+
+  <div class="row justify-content-center top-section">
+    <div class="container">
+      <div class="row view">
+        <div class="ml-md-5 col-10 col-sm-10 col-md-6 col-lg-5 card-while">
+
+          <div class="container">
+
+          <label class="text-primary text-label-title mt-3">Año - {{AnoBuscado}}</label>
+          
+          <div class="row mb-3">
+            <div class="col-12 col-sm-12 col-md-6 col-lg-7">
+              <input type="number"  class="form-control" [(ngModel)]="AnoNomina">
+            </div>
+            <div class="col-12 col-sm-12 col-md-6 col-lg-5 col align-self-center mt-2 mt-sm-0 mt-md-0 mt-lg-0">
+              <button type="button" class="btn btn-primary btn-block col-12"
+                (click)="obtenerMesesNomina()">buscar</button>
+            </div> 
+          </div>
+
+          <div class="row mb-3 no-margin">
+            <div class="col-12 download-list">
+
+
+              <label *ngIf="this.SinMeses" class="text-primary text-label-title mt-3">Año - {{AnoBuscado}} No disponible</label>
+
+              <div class="row line-item" *ngFor="let mes of this.mesesCartaLaboral; index as i">
+                <div class="col-6 col-sm-6 col-md-8 col-lg-8 color-gray">{{mes}}</div>
+                <div class="col-6 col-sm-6 col-md-4 col-lg-4 color-blue">
+                  <a (click)="generarCertificado(i)">Descarga</a>
+                </div>
+              </div>
+
+             
+
+
+            </div>
+          </div>
+
+        </div>
+        </div>        
+      </div>
+    </div>
+  </div>
+
+</div>
+<app-footer></app-footer>

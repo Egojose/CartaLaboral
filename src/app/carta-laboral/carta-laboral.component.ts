@@ -15,63 +15,70 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 })
 export class CartaLaboralComponent implements OnInit {
   form: FormGroup;
-  dirigido: string;
-  primerNombre: string;
-  segundoNombre: string;
-  primerApellido: string;
-  segundoApellido: string;
-  cargo: string;
-  cedula: string;
-  terminoContrato: string;
-  ObjConfigCL: configCartaLaboral[];
+
+  /*Info empleado*/
+  empresaEmpleado = "";
+  nitEmpresa = "";
+  formatoEmpresa = "";
+
+  primerNombre = "";
+  segundoNombre = "";
+  primerApellido = "";
+  segundoApellido = "";
+
+  tipoDocumento = "";
+  cedula = "";
+  lugarExpedicion = "";
+
+  fechaIngreso = "";
+  tipoContrato = "";
+
+  salario = "";
+  salarioTexto = "";
+  cargo = "";
+
   ObjEmpleado: Empleado[];
+
+/*Info empleado*/
+
+  cuerpo = "";
+  cuerpoSalario = "";
+  cuerpoCargo = "";
+
+  nombreDirector = "";
+  cargoDirector = "";
+  firmaDirector = "";
+
+  ObjConfigCL: configCartaLaboral[];
+  
   pdfSrc: any;
-  meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+  meses = new Array("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre");
+  
   usuario: any;
-  cuerpo: any;
-  salario: any;
-  salarioTexto: any;
-  nombreEmpresa: any;
-  fechaIngreso: Date;
-  notaExpedicion: any;
-  sede: string;
-  nitEmpresa: any;
-  nombreDirector: any;
-  cargoDirector: any;
-  firmaDirector: any;
-  
-  
-  
+  IncluirSalario = false;
+
+
 
   constructor(
     private spinnerService: Ng4LoadingSpinnerService,
     private route: ActivatedRoute,
     private servicio: SPServicio,
     public fb: FormBuilder
-  ) {}
+  ) { }
 
   async ngOnInit() {
     await this.ObtenerUsuarioActual();
-    // this.form = this.fb.group({
-    //   DirigidoA: [''],
-    // });
-    this.ObtenerConfiguracionCl();
    
-    // this.spinnerService.show();
-    // let id = this.route.snapshot.paramMap.get("id");
-    // let salario = this.route.snapshot.paramMap.get("salario");
-    // let funciones = this.route.snapshot.paramMap.get("funciones");
-    // let dirigidoA = this.route.snapshot.paramMap.get("dirigidoA");
-    // this.ObtenerConfiguracionCL(id, salario, funciones, dirigidoA);
+    this.ObtenerConfiguracionCl();
+    
   }
 
   async ObtenerUsuarioActual() {
     await this.servicio.ObtenerUsuarioActual().then(
       async (respuesta) => {
         this.usuario = respuesta;
-        console.log(this.usuario)
         await this.ObtenerEmpleado(this.usuario.Id);
-       
+
       }, (err) => {
         console.log('Error obteniendo usuario: ' + err);
       }
@@ -81,14 +88,13 @@ export class CartaLaboralComponent implements OnInit {
   ObtenerConfiguracionCl() {
     this.servicio.consultarConfiguracionCL().then(
       (respuesta) => {
-        console.log(respuesta);
-        this.cuerpo = respuesta[0].CuerpoIntegral;
-        this.nombreEmpresa = respuesta[0].NombreEmpresa;
-        this.nitEmpresa = respuesta[0].NitEmpresa;
-        this.notaExpedicion = respuesta[0].NotaExpedicion;
-        this.nombreDirector = respuesta[0].nombreDirectora;
-        this.cargoDirector = respuesta[0].nombreCargoDir;
-        this.firmaDirector = respuesta[0].ImagenFirmaDirectoraRH
+        
+        this.cuerpo = respuesta[0].CuerpoCarta;
+        this.cuerpoSalario = respuesta[0].cuerpoSalario;
+        this.cuerpoCargo = respuesta[0].CuerpoCargo;
+
+        
+        
       }
     )
   }
@@ -97,24 +103,40 @@ export class CartaLaboralComponent implements OnInit {
     await this.servicio.obtenerUsuario(id).then(
       (respuesta) => {
         console.log(respuesta);
-        this.primerNombre = respuesta[0].PrimerNombre;
-        this.segundoNombre = respuesta[0].SegundoNombre;
-        this.primerApellido = respuesta[0].PrimerApellido;
-        this.segundoApellido = respuesta[0].SegundoApellido;
-        this.cargo = respuesta[0].Cargo;
+        this.empresaEmpleado = respuesta[0].Empresa.Title;
+        this.nitEmpresa = respuesta[0].Empresa.Nit;
+        this.formatoEmpresa = respuesta[0].Empresa.UrlFormato;
+
+        this.primerNombre = respuesta[0].PrimerNombre ? respuesta[0].PrimerNombre : "";
+        this.segundoNombre = respuesta[0].SegundoNombre ? respuesta[0].SegundoNombre : "";
+        this.primerApellido = respuesta[0].PrimerApellido ? respuesta[0].PrimerApellido : "";
+        this.segundoApellido = respuesta[0].SegundoApellido ? respuesta[0].SegundoApellido : "";
+        
+        this.tipoDocumento = respuesta[0].TipoDocumento;
         this.cedula = respuesta[0].NumeroDocumento;
-        this.terminoContrato = respuesta[0].TerminoContrato;
-        this.salario = respuesta[0].Salario;
-        this.salarioTexto = respuesta[0].SalarioTexto;
+        this.lugarExpedicion = respuesta[0].lugarExpedicion;
+
         this.fechaIngreso = respuesta[0].FechaIngreso;
-        respuesta[0].Sede === null || respuesta[0].Sede === undefined ? this.sede = '' : this.sede = respuesta[0].Sede;
+        this.tipoContrato = respuesta[0].TipoContrato;
+
+        this.salario = this.formatSueldo(respuesta[0].Salario, respuesta[0].NumeroDocumento, respuesta[0].Id);
+        this.salarioTexto = respuesta[0].salarioTexto;
+        this.cargo = respuesta[0].Cargo;
+
+        this.nombreDirector = respuesta[0].Empresa.Director;
+        this.cargoDirector = respuesta[0].Empresa.Cargo;
+        this.firmaDirector = respuesta[0].Empresa.UrlFirma;
+
+
       }
     )
   }
 
- async generarCertificado() {
-   (this.dirigido === '' || this.dirigido === undefined || this.dirigido === null) ? this.dirigido = 'quien pueda interesar' : this.dirigido;
+  async generarCertificado() {
+   
+
     let nombre = `${this.primerNombre} ${this.segundoNombre} ${this.primerApellido} ${this.segundoApellido}`;
+    
     // let SalarioDecript = CryptoJS.AES.decrypt(
     //   this.salario.trim(),
     //   "12ab".trim()
@@ -130,77 +152,74 @@ export class CartaLaboralComponent implements OnInit {
     let diaInicio = new Date(this.fechaIngreso).getDate();
     let mesInicio = this.meses[new Date(this.fechaIngreso).getMonth()];
     let anioInicio = new Date(this.fechaIngreso).getFullYear();
-    
     this.cuerpo = this.cuerpo.replace("{nombre}", nombre);
     this.cuerpo = this.cuerpo.replace("{cedula}", this.cedula);
-    this.cuerpo = this.cuerpo.replace("{nombreEmpresa}", this.nombreEmpresa);
-    this.cuerpo = this.cuerpo.replace("{terminoContrato}", this.terminoContrato);
-    this.cuerpo = this.cuerpo.replace("{cargo}", this.cargo);
-    this.cuerpo = this.cuerpo.replace("{dia}", diaInicio);
-    this.cuerpo = this.cuerpo.replace("{mes}", mesInicio);
-    this.cuerpo = this.cuerpo.replace("{ano}", anioInicio);
-    this.cuerpo = this.cuerpo.replace("{salario}", this.salario);
-    this.cuerpo = this.cuerpo.replace("{salarioTexto}", this.salarioTexto);
+    this.cuerpo = this.cuerpo.replace("{lugarExpedicion}", this.lugarExpedicion);
+    this.cuerpo = this.cuerpo.replace("{fechaIngreso}", this.formatDate(new Date(this.fechaIngreso)) );
+    this.cuerpo = this.cuerpo.replace("{tipoContrato}", this.tipoContrato);
+    
+    this.cuerpoSalario = this.cuerpoSalario.replace("{salarioTexto}", this.formatLetrasSuelto(this.salarioTexto));
+    this.cuerpoSalario = this.cuerpoSalario.replace("{salario}", this.humanizeNumber(this.salario));
 
-    this.notaExpedicion = this.notaExpedicion.replace("{dirigidoA}", this.dirigido);
-    this.notaExpedicion = this.notaExpedicion.replace("{dia}", dia.toString());
-    this.notaExpedicion = this.notaExpedicion.replace("{mes}", mes.toString());
-    this.notaExpedicion = this.notaExpedicion.replace("{ano}", anio.toString());
+    this.cuerpoCargo = this.cuerpoCargo.replace("{cargo}", this.cargo);
+    
     let stringFecha = this.formatDate(fecha);
     const pdf = new PdfMakeWrapper();
 
     pdf.background(
-      await new Img("assets/imagenes/formatoMundoMujer-1.jpg").width(630).build()
+      await new Img(this.formatoEmpresa).width(630).build()
     );
     pdf.add(
-      new Txt(this.sede + ", " + stringFecha).margin([50, 50, 0, 0]).end
+      new Txt("Popayán, "+ stringFecha).margin([50, 50, 0, 0]).end
     );
     pdf.add(
-      new Txt(this.nombreEmpresa).bold().margin([155, 70, 0, 0]).end
+      new Txt("EL DIRECTOR EJECUTIVO").bold().margin([190, 40, 0, 0]).end
     );
+    
+    // pdf.add(
+    //   new Txt("|").bold().margin([255, 0, 0, 0]).end
+    // );
+    let textoEmpresa = "DE " + this.empresaEmpleado;
+    let margenDerechaTextoEmpresa = (255 - ((textoEmpresa.length * 0.5))*7.0);
     pdf.add(
-      new Txt("NIT "+ this.nitEmpresa).bold().margin([220, 0, 0, 0]).end
+      new Txt("DE " + this.empresaEmpleado).bold().margin([margenDerechaTextoEmpresa, 0, 0, 0]).end
     );
-    pdf.add(new Txt("CERTIFICA").margin([230, 70, 0, 0]).end);
-    pdf.add(new Txt(this.cuerpo).margin([50, 80, 0, 0]).end);
-    pdf.add(new Txt(this.notaExpedicion).margin([50, 80, 0, 0]).end);
-    pdf.add(new Txt("Cordialmente,").margin([50, 30, 0, 0]).end);
+    pdf.add(new Txt("CERTIFICA").bold().margin([230, 50, 0, 0]).end);
+    
+    pdf.add(new Txt(this.cuerpo).margin([50, 50, 0, 0]).end);
+
+    if (this.IncluirSalario)
+    {
+      pdf.add(new Txt(this.cuerpoSalario).margin([50, 30, 0, 0]).end);
+    }
+    
+    pdf.add(new Txt(this.cuerpoCargo).margin([50, 30, 0, 0]).end);
+
+    pdf.add(new Txt("Este cerificado se expide a petición del interesado.").margin([50, 50, 0, 0]).end);
+    
     pdf.add(
-      await new Img('assets/imagenes/Firma.jpg')
-        .margin([50, 0, 0, 0])
+      await new Img(this.firmaDirector)
+        .margin([50, 50, 0, 0])
         .width(130)
         .build()
     );
     pdf.add(
-      new Txt("_____________________________").margin([50, -30, 0, 0]).end
+      new Txt("_____________________________").margin([50, -10, 0, 0]).end
     );
-    pdf.add(new Txt(this.nombreDirector).margin([50, 0, 0, 0]).end);
-    pdf.add(new Txt(this.cargoDirector).fontSize(7).margin([50, 0, 0, 0]).end);
-    pdf.pageSize("A4");
-    pdf.pageMargins([ 40, 100, 40, 100 ]);
+    pdf.add(new Txt(this.nombreDirector).bold().margin([50, 5, 0, 0]).end);
+    pdf.add(new Txt(this.cargoDirector).bold().fontSize(7).margin([50, 0, 0, 0]).end);
+    
+
+    
+     pdf.pageSize("A4");
+    pdf.pageMargins([40, 100, 40, 100]);
     pdf.create().open();
     // setTimeout(() => {
     //   window.close();
     // }, 5000);  
   }
 
-  // ObtenerConfiguracionCL(id, salario, funciones, dirigidoA): any {
-  //   this.servicio
-  //     .consultarConfiguracionCL()
-  //     .then(res => {
-  //       this.ObjConfigCL = configCartaLaboral.fromJsonList(res);
-  //       this.ObtenerEmpleado(
-  //         id,
-  //         salario,
-  //         funciones,
-  //         dirigidoA,
-  //         this.ObjConfigCL[0]
-  //       );
-  //     })
-  //     .catch(error => {
-  //       console.log(error);
-  //     });
-  // }
+
 
   formatDate(date) {
     var d = date,
@@ -215,634 +234,51 @@ export class CartaLaboralComponent implements OnInit {
     return [day, month, year].join(" ");
   }
 
-  // ObtenerEmpleado(
-  //   id: string,
-  //   salario: string,
-  //   funciones: string,
-  //   dirigidoA,
-  //   ObjConfigCL: configCartaLaboral
-  // ): any {
-  //   this.servicio
-  //     .obtenerUsuario(id)
-  //     .then(async res => {
-  //       this.ObjEmpleado = Empleado.fromJsonList(res);
-  //       if (salario === "true") {
-  //         this.CrearCartaConSalario(
-  //           salario,
-  //           funciones,
-  //           dirigidoA,
-  //           ObjConfigCL,
-  //           this.ObjEmpleado[0]
-  //         );
-  //       } else {
-  //         this.CrearCartaSinSalario(
-  //           salario,
-  //           funciones,
-  //           dirigidoA,
-  //           ObjConfigCL,
-  //           this.ObjEmpleado[0]
-  //         );
-  //       }
-  //     })
-  //     .catch(error => {
-  //       console.log(error);
-  //     });
-  // }
 
-  async CrearCartaSinSalario(
-    salario: string,
-    funciones: string,
-    dirigidoA: any,
-    ObjConfigCL: configCartaLaboral,
-    ObjEmpleado: Empleado
-  ): Promise<any> {
-
-    if (funciones === "true") {
-      this.crearCartaConFunciones(salario, funciones, dirigidoA, ObjConfigCL, ObjEmpleado);      
-    } else {
-      this.crearCartaSinFunciones(salario, funciones, dirigidoA, ObjConfigCL, ObjEmpleado);
-    }    
-  }
-
-  async crearCartaConFunciones(salario: string, funciones: string, dirigidoA: any, ObjConfigCL: configCartaLaboral, ObjEmpleado: Empleado): Promise<any> {
-    let fecha = new Date();
-    let stringFecha = this.formatDate(fecha);
-
-    // let ObjEmpleado = this.ObjEmpleado[0];
-    let nombre =
-      ObjEmpleado.nombre2 === ""
-        ? ObjEmpleado.nombre1
-        : ObjEmpleado.nombre1 + " " + ObjEmpleado.nombre2;
-    let apellido =
-      ObjEmpleado.apellido2 === ""
-        ? ObjEmpleado.apellido1
-        : ObjEmpleado.apellido1 + " " + ObjEmpleado.apellido2;
-    let nombreCompleto = nombre + " " + apellido;
-    let cuerpoCarta = ObjConfigCL.CuerpoSinSalario;
-    cuerpoCarta = cuerpoCarta.replace("{nombre}", nombreCompleto);
-    cuerpoCarta = cuerpoCarta.replace("{cedula}", ObjEmpleado.numeroDocumento);
-    cuerpoCarta = cuerpoCarta.replace(
-      "{nombreEmpresa}",
-      ObjConfigCL.nombreEmpresa
-    );
-    cuerpoCarta = cuerpoCarta.replace(
-      "{terminoContrato}",
-      ObjEmpleado.terminoContrato
-    );
-    let fechaInicio = ObjEmpleado.fechaIngreso;
-    let dia = fechaInicio.getDate();
-    cuerpoCarta = cuerpoCarta.replace("{dia}", dia.toString());
-    // let mes = "" + (fechaInicio.getMonth() + 1);
-    let mes = this.meses[fecha.getMonth()];    
-    cuerpoCarta = cuerpoCarta.replace("{mes}", mes.toString());
-    let ano = fechaInicio.getFullYear();
-    cuerpoCarta = cuerpoCarta.replace("{ano}", ano.toString());
-    cuerpoCarta = cuerpoCarta.replace("{cargo}", ObjEmpleado.cargo);
-    const pdf = new PdfMakeWrapper();
-    pdf.background(
-      await new Img("../assets/imagenes/encabezado.jpg").width(630).build()
-    );
-    pdf.add(
-      new Txt(ObjEmpleado.sede + ", " + stringFecha).margin([50, 80, 0, 0]).end
-    );
-    pdf.add(
-      new Txt(ObjConfigCL.nombreEmpresa).bold().margin([100, 70, 0, 0]).end
-    );
-    pdf.add(
-      new Txt("NIT "+ObjConfigCL.nitEmpresa).bold().margin([200, 0, 0, 0]).end
-    );
-    pdf.add(new Txt("CERTIFICA").margin([230, 70, 0, 0]).end);
-    pdf.add(new Txt(cuerpoCarta).margin([50, 80, 0, 0]).end);
-
-    let objFunctiones = [];
-    objFunctiones = ObjEmpleado.funciones !== null && ObjEmpleado.funciones !== undefined ? ObjEmpleado.funciones.split(";"): [];
-    pdf.add(new Ul(objFunctiones).margin([50, 20, 0, 0]).end);
-
-    let notaExpedicion = ObjConfigCL.NotaExpedicion;
-    notaExpedicion = notaExpedicion.replace("{dirigidoA}", dirigidoA);
-    dia = fecha.getDate();
-    notaExpedicion = notaExpedicion.replace("{dia}", dia.toString());
-    mes = this.meses[fecha.getMonth()]; 
-    notaExpedicion = notaExpedicion.replace("{mes}", mes.toString());
-    ano = fecha.getFullYear();
-    notaExpedicion = notaExpedicion.replace("{ano}", ano.toString());
-    pdf.add(new Txt(notaExpedicion).margin([50, 10, 0, 0]).end);
-    pdf.add(new Txt("Cordialmente,").margin([50, 10, 0, 0]).end);
-    pdf.add(
-      await new Img(ObjConfigCL.imagenFirmaDir)
-        .margin([50, 0, 0, 0])
-        .width(130)
-        .build()
-    );
-    pdf.add(
-      new Txt("_____________________________").margin([50, -30, 0, 0]).end
-    );
-    pdf.add(new Txt(ObjConfigCL.nombreDirectorRH).margin([50, 0, 0, 0]).end);
-    pdf.add(new Txt(ObjConfigCL.nombreCargoDir).fontSize(7).margin([50, 0, 0, 0]).end);
-    pdf.pageSize("A4");
-    pdf.pageMargins([ 40, 100, 40, 100 ]);
-    pdf.create().open();
-    setTimeout(() => {
-      window.close();
-    }, 5000);
+  formatSueldo(sueldo, cedula , id ) {
+    var sueldoNumero = sueldo;
     
+    sueldoNumero = sueldoNumero.replace('SECRETO', '');
+    sueldoNumero = sueldoNumero.replace(/AXy/g, "0");
+    sueldoNumero = sueldoNumero / id;
+    sueldoNumero = sueldoNumero+(cedula*1)
+  
+    return sueldoNumero;
   }
 
+  formatLetrasSuelto(sueldo) {
+    var sueldoLetras = sueldo;
 
-  async crearCartaSinFunciones(salario: string, funciones: string, dirigidoA: any, ObjConfigCL: configCartaLaboral, ObjEmpleado: Empleado): Promise<any> {
-    let fecha = new Date();
-    let stringFecha = this.formatDate(fecha);
 
-    // let ObjEmpleado = this.ObjEmpleado[0];
-    let nombre =
-      ObjEmpleado.nombre2 === ""
-        ? ObjEmpleado.nombre1
-        : ObjEmpleado.nombre1 + " " + ObjEmpleado.nombre2;
-    let apellido =
-      ObjEmpleado.apellido2 === ""
-        ? ObjEmpleado.apellido1
-        : ObjEmpleado.apellido1 + " " + ObjEmpleado.apellido2;
-    let nombreCompleto = nombre + " " + apellido;
-    let cuerpoCarta = ObjConfigCL.CuerpoSinSalario;
-    cuerpoCarta = cuerpoCarta.replace("{nombre}", nombreCompleto);
-    cuerpoCarta = cuerpoCarta.replace("{cedula}", ObjEmpleado.numeroDocumento);
-    cuerpoCarta = cuerpoCarta.replace(
-      "{nombreEmpresa}",
-      ObjConfigCL.nombreEmpresa
-    );
-    cuerpoCarta = cuerpoCarta.replace(
-      "{terminoContrato}",
-      ObjEmpleado.terminoContrato
-    );
-    let fechaInicio = ObjEmpleado.fechaIngreso;
-    let dia = fechaInicio.getDate();
-    cuerpoCarta = cuerpoCarta.replace("{dia}", dia.toString());
-    // let mes = "" + (fechaInicio.getMonth() + 1);
-    let mes = this.meses[fechaInicio.getMonth()];
-    cuerpoCarta = cuerpoCarta.replace("{mes}", mes.toString());
-    let ano = fechaInicio.getFullYear();
-    cuerpoCarta = cuerpoCarta.replace("{ano}", ano.toString());
-    cuerpoCarta = cuerpoCarta.replace("{cargo}", ObjEmpleado.cargo);
-    const pdf = new PdfMakeWrapper();
-    pdf.background(
-      await new Img("../assets/imagenes/encabezado.jpg").width(630).build()
-    );
-    pdf.add(
-      new Txt(ObjEmpleado.sede + ", " + stringFecha).margin([50, 80, 0, 0]).end
-    );
-    pdf.add(
-      new Txt(ObjConfigCL.nombreEmpresa).bold().margin([100, 70, 0, 0]).end
-    );
-    pdf.add(
-      new Txt("NIT "+ObjConfigCL.nitEmpresa).bold().margin([200, 0, 0, 0]).end
-    );
-    pdf.add(new Txt("CERTIFICA").margin([230, 70, 0, 0]).end);
-    pdf.add(new Txt(cuerpoCarta).margin([50, 80, 0, 0]).end);
-    let notaExpedicion = ObjConfigCL.NotaExpedicion;
-    notaExpedicion = notaExpedicion.replace("{dirigidoA}", dirigidoA);
-    dia = fecha.getDate();
-    notaExpedicion = notaExpedicion.replace("{dia}", dia.toString());
-    mes = this.meses[fecha.getMonth()]; 
-    notaExpedicion = notaExpedicion.replace("{mes}", mes.toString());
-    ano = fecha.getFullYear();
-    notaExpedicion = notaExpedicion.replace("{ano}", ano.toString());
-    pdf.add(new Txt(notaExpedicion).margin([50, 80, 0, 0]).end);
-    pdf.add(new Txt("Cordialmente,").margin([50, 30, 0, 0]).end);
-    pdf.add(
-      await new Img(ObjConfigCL.imagenFirmaDir)
-        .margin([50, 0, 0, 0])
-        .width(130)
-        .build()
-    );
-    pdf.add(
-      new Txt("_____________________________").margin([50, -30, 0, 0]).end
-    );
-    pdf.add(new Txt(ObjConfigCL.nombreDirectorRH).margin([50, 0, 0, 0]).end);
-    pdf.add(new Txt(ObjConfigCL.nombreCargoDir).fontSize(7).margin([50, 0, 0, 0]).end);
-    pdf.pageSize("A4");
-    pdf.pageMargins([ 40, 100, 40, 100 ]);
-    pdf.create().open();
-    setTimeout(() => {
-      window.close();
-    }, 5000);
+    sueldoLetras = sueldoLetras.replace('SECRETO', '');
+
+
+    sueldoLetras = sueldoLetras.replace(/807/g, "N");
+    sueldoLetras = sueldoLetras.replace(/804/g, "O");
+    sueldoLetras = sueldoLetras.replace(/809/g, "U");
+    sueldoLetras = sueldoLetras.replace(/810/g, "A");
+    sueldoLetras = sueldoLetras.replace(/825/g, "S");
+    sueldoLetras = sueldoLetras.replace(/836/g, "C");
+    sueldoLetras = sueldoLetras.replace(/881/g, "I");
+    sueldoLetras = sueldoLetras.replace(/821/g, "E");
+    sueldoLetras = sueldoLetras.replace(/899/g, "M");
+    sueldoLetras = sueldoLetras.replace(/877/g, "L");
+
+    //replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(toUpper(triggerBody()?['salarioTexto']),'N','807'),'O','804'),'U','809'),'A','810'),'S','825'),'C','836'),'I','881'),'E','821'),'M','899'),'L','877')
+
+
+    return sueldoLetras;
   }
 
-  async CrearCartaConSalario(
-    salario: string,
-    funciones: string,
-    dirigidoA: any,
-    ObjConfigCL: configCartaLaboral,
-    ObjEmpleado: Empleado
-  ): Promise<any> {
-    if (ObjEmpleado.tipoContrato === "Integral") {
-      this.crearCartaSalarioInt(salario, funciones, dirigidoA, ObjConfigCL, ObjEmpleado);
-    } else {
-      this.crearCartaSalarioOrd(salario, funciones, dirigidoA, ObjConfigCL, ObjEmpleado);
+  humanizeNumber(n) {
+    n = n.toString()
+    while (true) {
+      var n2 = n.replace(/(\d)(\d{3})($|,|\.)/g, '$1.$2$3')
+      n2 = n2
+      if (n == n2) break
+      n = n2
     }
-  }
-  async crearCartaSalarioOrd(
-    salario: string, funciones: string,dirigidoA: any, 
-    ObjConfigCL: configCartaLaboral, ObjEmpleado: Empleado
-  ): Promise<any> {
-
-    if (funciones === "true") {
-      this.crearCartaSalarioOrdConFun(salario, funciones, dirigidoA, ObjConfigCL, ObjEmpleado);
-    }
-    else {
-      this.crearCartaSalarioOrdSinFun(salario, funciones, dirigidoA, ObjConfigCL, ObjEmpleado);
-    }     
-  }
-  async crearCartaSalarioOrdSinFun(salario: string, funciones: string, dirigidoA: any, ObjConfigCL: configCartaLaboral, ObjEmpleado: Empleado): Promise<any> {
-    let fecha = new Date();
-    let stringFecha = this.formatDate(fecha);
-
-    // let ObjEmpleado = this.ObjEmpleado[0];
-    let nombre =
-      ObjEmpleado.nombre2 === ""
-        ? ObjEmpleado.nombre1
-        : `${ObjEmpleado.nombre1} ${ObjEmpleado.nombre2}`;
-    let apellido =
-      ObjEmpleado.apellido2 === ""
-        ? ObjEmpleado.apellido1
-        : `${ObjEmpleado.apellido1} ${ObjEmpleado.apellido2}`;
-        let nombreCompleto = `${nombre} ${apellido}`
-    // let nombreCompleto = nombre + " " + apellido;
-    let cuerpoCarta = ObjConfigCL.CuerpoConSalario;
-    cuerpoCarta = cuerpoCarta.replace("{nombre}", nombreCompleto);
-    cuerpoCarta = cuerpoCarta.replace("{cedula}", ObjEmpleado.numeroDocumento);
-    cuerpoCarta = cuerpoCarta.replace(
-      "{nombreEmpresa}",
-      ObjConfigCL.nombreEmpresa
-    );
-    cuerpoCarta = cuerpoCarta.replace(
-      "{terminoContrato}",
-      ObjEmpleado.terminoContrato
-    );
-    let fechaInicio = ObjEmpleado.fechaIngreso;
-    let dia = fechaInicio.getDate();
-    cuerpoCarta = cuerpoCarta.replace("{dia}", dia.toString());
-    // let mes = "" + (fechaInicio.getMonth() + 1);
-    let mes = this.meses[fechaInicio.getMonth()];
-    cuerpoCarta = cuerpoCarta.replace("{mes}", mes.toString());
-    let ano = fechaInicio.getFullYear();
-    cuerpoCarta = cuerpoCarta.replace("{ano}", ano.toString());
-    cuerpoCarta = cuerpoCarta.replace("{cargo}", ObjEmpleado.cargo);
-    let SalarioTextoDecript = CryptoJS.AES.decrypt(
-      ObjEmpleado.salarioTexto.trim(),
-      "12ab".trim()
-    ).toString(CryptoJS.enc.Utf8);
-    cuerpoCarta = cuerpoCarta.replace("{salarioTexto}", SalarioTextoDecript);
-    let SalarioDecript = CryptoJS.AES.decrypt(
-      ObjEmpleado.salario.trim(),
-      "12ab".trim()
-    ).toString(CryptoJS.enc.Utf8);
-    cuerpoCarta = cuerpoCarta.replace("{salario}", SalarioDecript);
-    const pdf = new PdfMakeWrapper();
-    pdf.background(
-      await new Img("../assets/imagenes/encabezado.jpg").width(630).build()
-    );
-    pdf.add(
-      new Txt(ObjEmpleado.sede + ", " + stringFecha).margin([50, 50, 0, 0]).end
-    );
-    pdf.add(
-      new Txt(ObjConfigCL.nombreEmpresa).bold().margin([100, 50, 0, 0]).end
-    );
-    pdf.add(
-      new Txt("NIT "+ObjConfigCL.nitEmpresa).bold().margin([200, 0, 0, 0]).end
-    );
-    pdf.add(new Txt("CERTIFICA").margin([230, 50, 0, 0]).end);
-    pdf.add(new Txt(cuerpoCarta).margin([50, 50, 0, 0]).end);
-    let notaExpedicion = ObjConfigCL.NotaExpedicion;
-    notaExpedicion = notaExpedicion.replace("{dirigidoA}", dirigidoA);
-    dia = fecha.getDate();
-    notaExpedicion = notaExpedicion.replace("{dia}", dia.toString());
-    mes = this.meses[fecha.getMonth()]; 
-    notaExpedicion = notaExpedicion.replace("{mes}", mes.toString());
-    ano = fecha.getFullYear();
-    notaExpedicion = notaExpedicion.replace("{ano}", ano.toString());
-    pdf.add(new Txt(notaExpedicion).margin([50, 80, 0, 0]).end);
-    pdf.add(new Txt("Cordialmente,").margin([50, 30, 0, 0]).end);
-    pdf.add(
-      await new Img(ObjConfigCL.imagenFirmaDir)
-        .margin([50, 0, 0, 0])
-        .width(130)
-        .build()
-    );
-    pdf.add(
-      new Txt("_____________________________").margin([50, -30, 0, 0]).end
-    );
-    pdf.add(new Txt(ObjConfigCL.nombreDirectorRH).margin([50, 0, 0, 0]).end);
-    pdf.add(new Txt(ObjConfigCL.nombreCargoDir).fontSize(7).margin([50, 0, 0, 0]).end);
-    pdf.pageSize("A4");
-    pdf.pageMargins([ 40, 100, 40, 100 ]);
-    pdf.create().open();
-    setTimeout(() => {
-      window.close();
-    }, 5000);
-  }
-  async crearCartaSalarioOrdConFun(salario: string, funciones: string, dirigidoA: any, ObjConfigCL: configCartaLaboral, ObjEmpleado: Empleado): Promise<any> {
-    let fecha = new Date();
-    let stringFecha = this.formatDate(fecha);
-
-    // let ObjEmpleado = this.ObjEmpleado[0];
-    let nombre =
-      ObjEmpleado.nombre2 === ""
-        ? ObjEmpleado.nombre1
-        : ObjEmpleado.nombre1 + " " + ObjEmpleado.nombre2;
-    let apellido =
-      ObjEmpleado.apellido2 === ""
-        ? ObjEmpleado.apellido1
-        : ObjEmpleado.apellido1 + " " + ObjEmpleado.apellido2;
-    let nombreCompleto = nombre + " " + apellido;
-    let cuerpoCarta = ObjConfigCL.CuerpoConSalario;
-    cuerpoCarta = cuerpoCarta.replace("{nombre}", nombreCompleto);
-    cuerpoCarta = cuerpoCarta.replace("{cedula}", ObjEmpleado.numeroDocumento);
-    cuerpoCarta = cuerpoCarta.replace(
-      "{nombreEmpresa}",
-      ObjConfigCL.nombreEmpresa
-    );
-    cuerpoCarta = cuerpoCarta.replace(
-      "{terminoContrato}",
-      ObjEmpleado.terminoContrato
-    );
-    let fechaInicio = ObjEmpleado.fechaIngreso;
-    let dia = fechaInicio.getDate();
-    cuerpoCarta = cuerpoCarta.replace("{dia}", dia.toString());
-    // let mes = "" + (fechaInicio.getMonth() + 1);
-    let mes = this.meses[fechaInicio.getMonth()];
-    cuerpoCarta = cuerpoCarta.replace("{mes}", mes.toString());
-    let ano = fechaInicio.getFullYear();
-    cuerpoCarta = cuerpoCarta.replace("{ano}", ano.toString());
-    cuerpoCarta = cuerpoCarta.replace("{cargo}", ObjEmpleado.cargo);
-    let SalarioTextoDecript = CryptoJS.AES.decrypt(
-      ObjEmpleado.salarioTexto.trim(),
-      "12ab".trim()
-    ).toString(CryptoJS.enc.Utf8);
-    cuerpoCarta = cuerpoCarta.replace("{salarioTexto}", SalarioTextoDecript);
-    let SalarioDecript = CryptoJS.AES.decrypt(
-      ObjEmpleado.salario.trim(),
-      "12ab".trim()
-    ).toString(CryptoJS.enc.Utf8);
-    cuerpoCarta = cuerpoCarta.replace("{salario}", SalarioDecript);
-    const pdf = new PdfMakeWrapper();
-    pdf.background(
-      await new Img("../assets/imagenes/encabezado.jpg").width(630).build()
-    );
-    pdf.add(
-      new Txt(`${ObjEmpleado.sede}, ${stringFecha}`).margin([50, 80, 0, 0]).end
-    );
-    pdf.add(
-      new Txt(ObjConfigCL.nombreEmpresa).bold().margin([100, 70, 0, 0]).end
-    );
-    pdf.add(
-      new Txt("NIT "+ObjConfigCL.nitEmpresa).bold().margin([200, 0, 0, 0]).end
-    );
-    pdf.add(new Txt("CERTIFICA").margin([230, 70, 0, 0]).end);
-    pdf.add(new Txt(cuerpoCarta).margin([50, 80, 0, 0]).end);
-
-    let objFunctiones = [];
-    objFunctiones = ObjEmpleado.funciones !== null && ObjEmpleado.funciones !== undefined ? ObjEmpleado.funciones.split(";"): [];
-    pdf.add(new Ul(objFunctiones).margin([50, 20, 0, 0]).end);
-
-    let notaExpedicion = ObjConfigCL.NotaExpedicion;
-    notaExpedicion = notaExpedicion.replace("{dirigidoA}", dirigidoA);
-    dia = fecha.getDate();
-    notaExpedicion = notaExpedicion.replace("{dia}", dia.toString());
-    mes = this.meses[fecha.getMonth()]; 
-    notaExpedicion = notaExpedicion.replace("{mes}", mes.toString());
-    ano = fecha.getFullYear();
-    notaExpedicion = notaExpedicion.replace("{ano}", ano.toString());
-    pdf.add(new Txt(notaExpedicion).margin([50, 10, 0, 0]).end);
-    pdf.add(new Txt("Cordialmente,").margin([50, 10, 0, 0]).end);
-    pdf.add(
-      await new Img(ObjConfigCL.imagenFirmaDir)
-        .margin([50, 0, 0, 0])
-        .width(130)
-        .build()
-    );
-    pdf.add(
-      new Txt("_____________________________").margin([50, -30, 0, 0]).end
-    );
-    pdf.add(new Txt(ObjConfigCL.nombreDirectorRH).margin([50, 0, 0, 0]).end);
-    pdf.add(new Txt(ObjConfigCL.nombreCargoDir).fontSize(7).margin([50, 0, 0, 0]).end);
-    pdf.pageSize("A4");
-    pdf.pageMargins([ 40, 100, 40, 100 ]);
-    pdf.create().open();
-    setTimeout(() => {
-      window.close();
-    }, 5000);
+    return n
   }
 
-  async crearCartaSalarioInt(
-    salario: string,
-    funciones: string,
-    dirigidoA: any,
-    ObjConfigCL: configCartaLaboral,
-    ObjEmpleado: Empleado
-  ): Promise<any> {
-
-    if (funciones === "true") {
-      this.crearCartaSalarioIntConFun(salario, funciones, dirigidoA, ObjConfigCL, ObjEmpleado);
-    }
-    else {
-      this.crearCartaSalarioIntSinFun(salario, funciones, dirigidoA, ObjConfigCL, ObjEmpleado);
-    }    
-  }
-
-  async crearCartaSalarioIntSinFun( salario: string,
-    funciones: string,
-    dirigidoA: any,
-    ObjConfigCL: configCartaLaboral,
-    ObjEmpleado: Empleado): Promise<any> {
-    let fecha = new Date();
-    let stringFecha = this.formatDate(fecha);
-
-    // let ObjEmpleado = this.ObjEmpleado[0];
-    let nombre =
-      ObjEmpleado.nombre2 === ""
-        ? ObjEmpleado.nombre1
-        : ObjEmpleado.nombre1 + " " + ObjEmpleado.nombre2;
-    let apellido =
-      ObjEmpleado.apellido2 === ""
-        ? ObjEmpleado.apellido1
-        : ObjEmpleado.apellido1 + " " + ObjEmpleado.apellido2;
-    let nombreCompleto = nombre + " " + apellido;
-    let cuerpoCarta = ObjConfigCL.CuerpoIntegral;
-    cuerpoCarta = cuerpoCarta.replace("{nombre}", nombreCompleto);
-    cuerpoCarta = cuerpoCarta.replace("{cedula}", ObjEmpleado.numeroDocumento);
-    cuerpoCarta = cuerpoCarta.replace(
-      "{nombreEmpresa}",
-      ObjConfigCL.nombreEmpresa
-    );
-    cuerpoCarta = cuerpoCarta.replace(
-      "{terminoContrato}",
-      ObjEmpleado.terminoContrato
-    );
-    let fechaInicio = ObjEmpleado.fechaIngreso;
-    let dia = fechaInicio.getDate();
-    cuerpoCarta = cuerpoCarta.replace("{dia}", dia.toString());
-    // let mes = "" + (fechaInicio.getMonth() + 1);
-    let mes = this.meses[fechaInicio.getMonth()];
-    cuerpoCarta = cuerpoCarta.replace("{mes}", mes.toString());
-    let ano = fechaInicio.getFullYear();
-    cuerpoCarta = cuerpoCarta.replace("{ano}", ano.toString());
-    cuerpoCarta = cuerpoCarta.replace("{cargo}", ObjEmpleado.cargo);
-    let SalarioTextoDecript = CryptoJS.AES.decrypt(
-      ObjEmpleado.salarioTexto.trim(),
-      "12ab".trim()
-    ).toString(CryptoJS.enc.Utf8);
-    cuerpoCarta = cuerpoCarta.replace("{salarioTexto}", SalarioTextoDecript);
-    let SalarioDecript = CryptoJS.AES.decrypt(
-      ObjEmpleado.salario.trim(),
-      "12ab".trim()
-    ).toString(CryptoJS.enc.Utf8);
-    cuerpoCarta = cuerpoCarta.replace("{salario}", SalarioDecript);
-    const pdf = new PdfMakeWrapper();
-    pdf.background(
-      await new Img("../assets/imagenes/encabezado.jpg").width(630).build()
-    );
-    pdf.add(
-      new Txt(ObjEmpleado.sede + ", " + stringFecha).margin([50, 80, 0, 0]).end
-    );
-    pdf.add(
-      new Txt(ObjConfigCL.nombreEmpresa).bold().margin([100, 70, 0, 0]).end
-    );
-    pdf.add(
-      new Txt("NIT "+ObjConfigCL.nitEmpresa).bold().margin([200, 0, 0, 0]).end
-    );
-    pdf.add(new Txt("CERTIFICA").margin([230, 70, 0, 0]).end);
-    pdf.add(new Txt(cuerpoCarta).margin([50, 40, 0, 0]).end);
-
-    
-    let notaExpedicion = ObjConfigCL.NotaExpedicion;
-    notaExpedicion = notaExpedicion.replace("{dirigidoA}", dirigidoA);
-    dia = fecha.getDate();
-    notaExpedicion = notaExpedicion.replace("{dia}", dia.toString());
-    mes = this.meses[fecha.getMonth()]; 
-    notaExpedicion = notaExpedicion.replace("{mes}", mes.toString());
-    ano = fecha.getFullYear();
-    notaExpedicion = notaExpedicion.replace("{ano}", ano.toString());
-    pdf.add(new Txt(notaExpedicion).margin([50, 80, 0, 0]).end);
-    pdf.add(new Txt("Cordialmente,").margin([50, 30, 0, 0]).end);
-    pdf.add(
-      await new Img(ObjConfigCL.imagenFirmaDir)
-        .margin([50, 0, 0, 0])
-        .width(130)
-        .build()
-    );
-    pdf.add(
-      new Txt("_____________________________").margin([50, -30, 0, 0]).end
-    );
-    pdf.add(new Txt(ObjConfigCL.nombreDirectorRH).margin([50, 0, 0, 0]).end);
-    pdf.add(new Txt(ObjConfigCL.nombreCargoDir).fontSize(7).margin([50, 0, 0, 0]).end);
-    pdf.pageSize("A4");
-    pdf.pageMargins([ 40, 100, 40, 100 ]);
-    pdf.create().open();
-    setTimeout(() => {
-      window.close();
-    }, 5000);
-  }
-
-  async crearCartaSalarioIntConFun( salario: string,
-    funciones: string,
-    dirigidoA: any,
-    ObjConfigCL: configCartaLaboral,
-    ObjEmpleado: Empleado): Promise<any> {
-    let fecha = new Date();
-    let stringFecha = this.formatDate(fecha);
-
-    // let ObjEmpleado = this.ObjEmpleado[0];
-    let nombre =
-      ObjEmpleado.nombre2 === ""
-        ? ObjEmpleado.nombre1
-        : ObjEmpleado.nombre1 + " " + ObjEmpleado.nombre2;
-    let apellido =
-      ObjEmpleado.apellido2 === ""
-        ? ObjEmpleado.apellido1
-        : ObjEmpleado.apellido1 + " " + ObjEmpleado.apellido2;
-    let nombreCompleto = nombre + " " + apellido;
-    let cuerpoCarta = ObjConfigCL.CuerpoIntegral;
-    cuerpoCarta = cuerpoCarta.replace("{nombre}", nombreCompleto);
-    cuerpoCarta = cuerpoCarta.replace("{cedula}", ObjEmpleado.numeroDocumento);
-    cuerpoCarta = cuerpoCarta.replace(
-      "{nombreEmpresa}",
-      ObjConfigCL.nombreEmpresa
-    );
-    cuerpoCarta = cuerpoCarta.replace(
-      "{terminoContrato}",
-      ObjEmpleado.terminoContrato
-    );
-    let fechaInicio = ObjEmpleado.fechaIngreso;
-    let dia = fechaInicio.getDate();
-    cuerpoCarta = cuerpoCarta.replace("{dia}", dia.toString());
-    // let mes = "" + (fechaInicio.getMonth() + 1);
-    let mes = this.meses[fechaInicio.getMonth()];
-    cuerpoCarta = cuerpoCarta.replace("{mes}", mes.toString());
-    let ano = fechaInicio.getFullYear();
-    cuerpoCarta = cuerpoCarta.replace("{ano}", ano.toString());
-    cuerpoCarta = cuerpoCarta.replace("{cargo}", ObjEmpleado.cargo);
-    let SalarioTextoDecript = CryptoJS.AES.decrypt(
-      ObjEmpleado.salarioTexto.trim(),
-      "12ab".trim()
-    ).toString(CryptoJS.enc.Utf8);
-    cuerpoCarta = cuerpoCarta.replace("{salarioTexto}", SalarioTextoDecript);
-    let SalarioDecript = CryptoJS.AES.decrypt(
-      ObjEmpleado.salario.trim(),
-      "12ab".trim()
-    ).toString(CryptoJS.enc.Utf8);
-    cuerpoCarta = cuerpoCarta.replace("{salario}", SalarioDecript);
-    const pdf = new PdfMakeWrapper();
-    pdf.background(
-      await new Img("../assets/imagenes/encabezado.jpg").width(630).build()
-    );
-    pdf.add(
-      new Txt(ObjEmpleado.sede + ", " + stringFecha).margin([50, 80, 0, 0]).end
-    );
-    pdf.add(
-      new Txt(ObjConfigCL.nombreEmpresa).bold().margin([100, 70, 0, 0]).end
-    );
-    pdf.add(
-      new Txt("NIT "+ObjConfigCL.nitEmpresa).bold().margin([200, 0, 0, 0]).end
-    );
-    pdf.add(new Txt("CERTIFICA").margin([230, 70, 0, 0]).end);
-    pdf.add(new Txt(cuerpoCarta).margin([50, 40, 0, 0]).end);
-
-    pdf.add(new Txt(ObjConfigCL.CuerpoFunciones).margin([50, 20, 0, 0]).end);
-
-    let objFunctiones = [];
-    objFunctiones = ObjEmpleado.funciones !== null && ObjEmpleado.funciones !== undefined ? ObjEmpleado.funciones.split(";"): [];
-    pdf.add(new Ul(objFunctiones).margin([50, 20, 0, 0]).end);
-    
-    let notaExpedicion = ObjConfigCL.NotaExpedicion;
-    notaExpedicion = notaExpedicion.replace("{dirigidoA}", dirigidoA);
-    dia = fecha.getDate();
-    notaExpedicion = notaExpedicion.replace("{dia}", dia.toString());
-    mes = this.meses[fecha.getMonth()]; 
-    notaExpedicion = notaExpedicion.replace("{mes}", mes.toString());
-    ano = fecha.getFullYear();
-    notaExpedicion = notaExpedicion.replace("{ano}", ano.toString());
-    pdf.add(new Txt(notaExpedicion).margin([50, 10, 0, 0]).end);
-    pdf.add(new Txt("Cordialmente,").margin([50, 10, 0, 0]).end);
-    pdf.add(
-      await new Img(ObjConfigCL.imagenFirmaDir)
-        .margin([50, 0, 0, 0])
-        .width(130)
-        .build()
-    );
-    pdf.add(
-      new Txt("_____________________________").margin([50, -30, 0, 0]).end
-    );
-    pdf.add(new Txt(ObjConfigCL.nombreDirectorRH).margin([50, 0, 0, 0]).end);
-    pdf.add(new Txt(ObjConfigCL.nombreCargoDir).fontSize(7).margin([50, 0, 0, 0]).end);
-    pdf.pageMargins([ 40, 100, 40, 100 ]);
-    pdf.pageSize("A4");
-    pdf.create().open();
-    setTimeout(() => {
-      window.close();
-    }, 5000);
-  }
-
-  CrearCartaConFunciones() {
-    
-  }
 }

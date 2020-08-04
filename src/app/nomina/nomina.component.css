@@ -1,0 +1,264 @@
+.card-while{
+    background-color: #fefefe;
+    box-shadow: 0 .125rem .25rem rgba(0,0,0,.075)!important;
+}
+
+input{
+    background-color: #ced4da;
+}
+
+.download-list{
+    background-color: #ced4da;
+    padding: 25px 30px 30px 30px;
+    border-radius: 3px;
+    overflow-y: auto;
+    height: 200px;
+}
+
+.no-margin{
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+.line-item{
+    border-bottom: 1px solid #5e5e5e;
+    font-size: 16px;
+    margin-top: 5px;
+}
+
+.color-gray{
+    color: #5e5e5e;
+}
+
+.color-blue{
+    color: #0f5990;
+}
+/*
+  responsive view
+*/
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 320px) {
+    .content-background{
+      height: 100vh;
+      background-color: #D7D7D6;    
+      background-image: url('../../assets/imagenes/GEMM-nomina-2-movil-.png');
+      margin: 0px;
+      width: 100%;
+      max-width: 100%;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      position: relative;
+    }
+  
+    .border-title{
+      padding-top: 22px; 
+      background-color: #0f5990;
+      padding-top: 30px;
+      padding-bottom: 30px;
+      border-bottom-left-radius: 45px;
+      border-bottom-right-radius: 45px;
+      color: #fefefe;
+      font-size: 28px;    
+      font-weight: 500;
+      text-transform: uppercase;
+    }
+  
+    .top-section{
+      margin-top: 40px;
+    }
+  
+    .text-label-title{
+        font-size: 30px;
+        font-weight: 500;
+    }
+
+    .view{
+        -webkit-box-pack: center!important;
+        -ms-flex-pack: center!important;
+        justify-content: center!important;
+    }
+
+ 
+}
+  
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {
+    .content-background{
+        height: 100vh;
+        background-color: #D7D7D6;    
+        background-image: url('../../assets/imagenes/GEMM-nomina-2-movil-.png');
+        margin: 0px;
+        width: 100%;
+        max-width: 100%;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        position: relative;
+    }
+
+    .border-title{
+        padding-top: 22px; 
+        background-color:#0f5990;
+        padding-top: 30px;
+        padding-bottom: 30px;
+        border-bottom-left-radius: 45px;
+        border-bottom-right-radius: 45px;
+        color: #fefefe;
+        font-size: 50px;    
+        font-weight: 500;
+        text-transform: uppercase;
+    }
+
+    .top-section{
+        margin-top: 60px;
+    }
+
+    .text-label-title{
+        font-size: 30px;
+        font-weight: 500;
+    }
+
+    .view{
+        -webkit-box-pack: center!important;
+        -ms-flex-pack: center!important;
+        justify-content: center!important;
+    }
+
+}
+  
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+    .content-background{
+        height: 100vh;
+        background-color: #D7D7D6;    
+        background-image: url('../../assets/imagenes/GEMM-nomina-2.png');
+        margin: 0px;
+        width: 100%;
+        max-width: 100%;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        position: relative;
+    }
+
+    .border-title{
+        padding-top: 22px; 
+        background-color: #0f5990;
+        padding-top: 30px;
+        padding-bottom: 30px;
+        border-bottom-left-radius: 45px;
+        border-bottom-right-radius: 45px;
+        color: #fefefe;
+        font-size: 50px;
+        font-weight: 500;
+        text-transform: uppercase;
+    }
+
+    .top-section{
+        margin-top: 60px;
+    }
+
+    .text-label-title{
+        font-size: 30px;
+        font-weight: 500;
+    }
+
+    .view{
+        -webkit-box-pack: center!important;
+        -ms-flex-pack: center!important;
+        justify-content: center!important;
+    }
+
+}
+  
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+    .content-background{
+        height: 100vh;
+        background-color: #D7D7D6;    
+        background-image: url('../../assets/imagenes/GEMM-nomina-2.png');
+        margin: 0px;
+        width: 100%;
+        max-width: 100%;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        position: relative;
+    }
+
+    .border-title{
+        padding-top: 22px; 
+        background-color: #0f5990;
+        padding-top: 30px;
+        padding-bottom: 30px;
+        border-bottom-left-radius: 45px;
+        border-bottom-right-radius: 45px;
+        color: #fefefe;
+        font-size: 50px;    
+        font-weight: 500;
+        text-transform: uppercase;
+    }
+
+    .top-section{
+        margin-top: 60px;
+    }
+
+    .text-label-title{
+        font-size: 30px;
+        font-weight: 500;
+    }
+
+    .view{
+        -webkit-box-pack: left !important;
+        -ms-flex-pack: left !important;
+        justify-content: left !important;
+    }
+
+}
+  
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    .content-background{
+      height: 100vh;
+      background-color: #D7D7D6;    
+      background-image: url('../../assets/imagenes/GEMM-nomina-2.png');
+      margin: 0px;
+      width: 100%;
+      max-width: 100%;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      position: relative;
+    }
+  
+    .border-title{
+      padding-top: 22px; 
+      background-color: #0f5990;
+      padding-top: 30px;
+      padding-bottom: 30px;
+      border-bottom-left-radius: 45px;
+      border-bottom-right-radius: 45px;
+      color: #fefefe;
+      font-size: 50px;
+      font-weight: 500;
+      text-transform: uppercase;
+    }
+  
+    .top-section{
+      margin-top: 40px;
+    }
+  
+    .text-label-title{
+        font-size: 30px;
+        font-weight: 500;
+    }
+
+    .view{
+        -webkit-box-pack: left !important;
+        -ms-flex-pack: left !important;
+        justify-content: left !important;
+    }
+  
+}

@@ -4,7 +4,8 @@ export const environment = {
   urlWeb: 'https://grupoemm.sharepoint.com/sites/INTRAGEMM', 
   urlWebGH: 'https://enovelsoluciones.sharepoint.com/sites/IntranetAraujo/gestion-humana', 
   urlReltativa: 'sites/Intranet/Servicios',
-  ListaEmpleados: 'empleados',
-  ListaConfiguracionCartaLaboral: 'ConfiguracionCartaLaboral'
+  ListaEmpleados: 'Empleados',
+  ListaConfiguracionCartaLaboral: 'ConfiguracionCartaLaboral',
+  ListaDetalleNomina: 'DetalleNomina'
 };
 

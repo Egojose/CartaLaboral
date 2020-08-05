@@ -403,7 +403,7 @@ export class NominaComponent implements OnInit {
       pdf.pageSize("A4");
       pdf.pageMargins([40, 100, 40, 100]);
       pdf.pageOrientation('landscape');
-      pdf.create().open();
+      pdf.create().download('Desprendible_' + this.cedula + "_" + this.AnoBuscado + "_" + this.mesesCartaLaboral[pmes]);
       // setTimeout(() => {
       //   window.close();
       // }, 5000);  

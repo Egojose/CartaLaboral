@@ -39,7 +39,7 @@
 
 .card-while{
   background-color: #fefefe;
-  border-bottom: 10px solid yellow;
+  border-bottom: 10px solid #e9cd15;
 }
 
 ::ng-deep .mat-checkbox-layout .mat-checkbox-inner-container{

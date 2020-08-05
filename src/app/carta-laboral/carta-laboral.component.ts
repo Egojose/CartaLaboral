@@ -44,6 +44,7 @@ export class CartaLaboralComponent implements OnInit {
   cuerpo = "";
   cuerpoSalario = "";
   cuerpoCargo = "";
+  cuerpoPeticion = "";
 
   nombreDirector = "";
   cargoDirector = "";
@@ -92,6 +93,7 @@ export class CartaLaboralComponent implements OnInit {
         this.cuerpo = respuesta[0].CuerpoCarta;
         this.cuerpoSalario = respuesta[0].cuerpoSalario;
         this.cuerpoCargo = respuesta[0].CuerpoCargo;
+        this.cuerpoPeticion = respuesta[0].CuerpoPeticion;
 
         
         
@@ -136,15 +138,7 @@ export class CartaLaboralComponent implements OnInit {
    
 
     let nombre = `${this.primerNombre} ${this.segundoNombre} ${this.primerApellido} ${this.segundoApellido}`;
-    
-    // let SalarioDecript = CryptoJS.AES.decrypt(
-    //   this.salario.trim(),
-    //   "12ab".trim()
-    // ).toString(CryptoJS.enc.Utf8);
-    // let SalarioTextoDecript = CryptoJS.AES.decrypt(
-    //   this.salarioTexto.trim(),
-    //   "12ab".trim()
-    // ).toString(CryptoJS.enc.Utf8);
+
     let fecha = new Date();
     let dia = fecha.getDate();
     let mes = this.meses[fecha.getMonth()];
@@ -176,9 +170,7 @@ export class CartaLaboralComponent implements OnInit {
       new Txt("EL DIRECTOR EJECUTIVO").bold().margin([190, 40, 0, 0]).end
     );
     
-    // pdf.add(
-    //   new Txt("|").bold().margin([255, 0, 0, 0]).end
-    // );
+
     let textoEmpresa = "DE " + this.empresaEmpleado;
     let margenDerechaTextoEmpresa = (255 - ((textoEmpresa.length * 0.5))*7.0);
     pdf.add(
@@ -195,7 +187,7 @@ export class CartaLaboralComponent implements OnInit {
     
     pdf.add(new Txt(this.cuerpoCargo).margin([50, 30, 0, 0]).end);
 
-    pdf.add(new Txt("Este cerificado se expide a petición del interesado.").margin([50, 50, 0, 0]).end);
+    pdf.add(new Txt(this.cuerpoPeticion).margin([50, 50, 0, 0]).end);
     
     pdf.add(
       await new Img(this.firmaDirector)
@@ -211,9 +203,12 @@ export class CartaLaboralComponent implements OnInit {
     
 
     
-     pdf.pageSize("A4");
+    pdf.pageSize("A4");
+    
     pdf.pageMargins([40, 100, 40, 100]);
-    pdf.create().open();
+    
+    
+    pdf.create().download('CartaLaboral_' + this.cedula + "_" + fecha.getDate()+"_"+(fecha.getMonth()+1)+"_"+fecha.getFullYear());
     // setTimeout(() => {
     //   window.close();
     // }, 5000);  

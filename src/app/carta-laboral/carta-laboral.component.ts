@@ -167,7 +167,7 @@ export class CartaLaboralComponent implements OnInit {
       new Txt("Popayán, "+ stringFecha).margin([50, 50, 0, 0]).end
     );
     pdf.add(
-      new Txt("EL DIRECTOR EJECUTIVO").bold().margin([190, 40, 0, 0]).end
+      new Txt(`EL ${this.cargoDirector.toUpperCase()}`).bold().margin([190, 40, 0, 0]).end
     );
     
 

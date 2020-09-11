@@ -192,6 +192,7 @@ export class CartaLaboralComponent implements OnInit {
     pdf.pageMargins([ 40, 100, 40, 100 ]);
     pdf.create().open();
     setTimeout(() => {
+      sessionStorage.clear();
       window.close();
     }, 5000);
     
@@ -272,6 +273,7 @@ export class CartaLaboralComponent implements OnInit {
     pdf.pageMargins([ 40, 100, 40, 100 ]);
     pdf.create().open();
     setTimeout(() => {
+      sessionStorage.clear();
       window.close();
     }, 5000);
   }
@@ -386,6 +388,7 @@ export class CartaLaboralComponent implements OnInit {
     pdf.pageMargins([ 40, 100, 40, 100 ]);
     pdf.create().open();
     setTimeout(() => {
+      sessionStorage.clear();
       window.close();
     }, 5000);
   }
@@ -478,6 +481,7 @@ export class CartaLaboralComponent implements OnInit {
     pdf.pageMargins([ 40, 100, 40, 100 ]);
     pdf.create().open();
     setTimeout(() => {
+      sessionStorage.clear();
       window.close();
     }, 5000);
   }
@@ -588,6 +592,7 @@ export class CartaLaboralComponent implements OnInit {
     pdf.pageMargins([ 40, 100, 40, 100 ]);
     pdf.create().open();
     setTimeout(() => {
+      sessionStorage.clear();
       window.close();
     }, 5000);
   }
@@ -687,6 +692,7 @@ export class CartaLaboralComponent implements OnInit {
     pdf.pageSize("A4");
     pdf.create().open();
     setTimeout(() => {
+      sessionStorage.clear();
       window.close();
     }, 5000);
   }

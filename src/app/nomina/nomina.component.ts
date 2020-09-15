@@ -55,7 +55,7 @@ export class NominaComponent implements OnInit {
   ObjConfigCL: configCartaLaboral[];
 
   pdfSrc: any;
-  meses = new Array("ENERO", "FEBRERO", "MARCO", "ABRIL", "MAYO",
+  meses = new Array("ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO",
     "JUNIO", "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE");
   mesesCartaLaboral = [];
   usuario: any;

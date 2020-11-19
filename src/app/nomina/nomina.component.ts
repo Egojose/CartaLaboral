@@ -323,7 +323,7 @@ export class NominaComponent implements OnInit {
             }, {
               border: [false, true, false, true],
               fillColor: '#eeeeee',
-              text: 'DEDICUDO',
+              text: 'DEDUCIDO',
               alignment: 'center'
             }]
         ]).widths([100, '*', 100, 100, 100]).margin([20, 10, 0, 0]).bold().end
